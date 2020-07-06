@@ -1,0 +1,1 @@
+App icon used from [here](https://thenounproject.com/term/arduino/34403/)
