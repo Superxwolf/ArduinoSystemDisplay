@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO.Ports;
 using System.Windows.Forms;
-using SerialDisplay.Properties;
+using ArduinoSystemDisplay.Properties;
 
-namespace SerialDisplay
+namespace ArduinoSystemDisplay
 {
     public static class PerformanceInfo
     {
@@ -78,7 +78,7 @@ namespace SerialDisplay
             PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             decimal totalMemory = PerformanceInfo.GetTotalMemoryInMiB();
 
-            byte[] data = { 101, 0, 0 };
+            byte[] data = { 101, 0, 0, 0, 0, 0 };
             while (true)
             {
                 if (!serial.IsOpen)
@@ -107,7 +107,7 @@ namespace SerialDisplay
 
                 try
                 {
-                    serial.Write(data, 0, 3);
+                    serial.Write(data, 0, 6);
                 }
                 catch
                 {

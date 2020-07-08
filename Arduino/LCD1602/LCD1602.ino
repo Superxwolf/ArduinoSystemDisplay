@@ -51,9 +51,9 @@ void loop()
       // Update CPU and Memory
       // Computer sends a byte per component, already in percentage range.
       case 101:
-        Serial.readBytes(serial_buffer, 2);
-        cur_cpu = serial_buffer[1];
-        cur_memory = serial_buffer[2];
+        Serial.readBytes(serial_buffer, 5);
+        cur_cpu = serial_buffer[0];
+        cur_memory = serial_buffer[1];
         break;
     }
   }
