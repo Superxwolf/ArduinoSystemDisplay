@@ -2,9 +2,11 @@
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
+using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
 using ArduinoSystemDisplay.Properties;
+
 
 namespace ArduinoSystemDisplay
 {
@@ -77,6 +79,18 @@ namespace ArduinoSystemDisplay
         {
             PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             decimal totalMemory = PerformanceInfo.GetTotalMemoryInMiB();
+            DriveInfo[] drives = DriveInfo.GetDrives();
+
+            DriveInfo c_drive = null;
+            foreach(var drive in DriveInfo.GetDrives())
+            {
+                if(drive.Name == "C:\\")
+                {
+                    c_drive = drive;
+                }
+            }
+
+            PerformanceCounter diskIOCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
 
             byte[] data = { 101, 0, 0, 0, 0, 0 };
             while (true)
@@ -104,6 +118,13 @@ namespace ArduinoSystemDisplay
                 decimal percentOccupied = 100 - percentFree;
 
                 data[2] = (byte)percentOccupied;
+
+                if(c_drive != null)
+                {
+                    data[3] = (byte)((c_drive.TotalSize - c_drive.TotalFreeSpace) / (double)c_drive.TotalSize * 100.0);
+                }
+
+                data[4] = (byte)diskIOCounter.NextValue();
 
                 try
                 {
